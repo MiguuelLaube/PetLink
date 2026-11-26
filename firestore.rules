@@ -1,0 +1,183 @@
+rules_version = '2';
+
+// PetLink — Security Rules (equivalente às RLS do piloto, agora restritivas).
+// Perfis: users/{uid}.role = 'user' | 'ong' | 'admin'.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function signedIn() { return request.auth != null; }
+    function userPath(id) { return /databases/$(database)/documents/users/$(id); }
+    function hasProfile() { return signedIn() && exists(userPath(request.auth.uid)); }
+    function me() { return get(userPath(request.auth.uid)).data; }
+    function isActive() { return hasProfile() && me().active == true; }
+    function isAdmin() { return isActive() && me().role == 'admin'; }
+    function isOng() { return isActive() && me().role == 'ong'; }
+    function myOngId() { return me().ongId; }
+    function ownsOng(ongId) { return isOng() && myOngId() == ongId; }
+    function ongDoc(ongId) { return get(/databases/$(database)/documents/ongs/$(ongId)).data; }
+    function myOngApproved() { return isOng() && ongDoc(myOngId()).status == 'aprovada'; }
+    function petDoc(petId) { return get(/databases/$(database)/documents/pets/$(petId)).data; }
+    function petReadable(petId) {
+      return petDoc(petId).statusPublicacao == 'publicado' || ownsOng(petDoc(petId).ongId) || isAdmin();
+    }
+    function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    function onlyChanged(keys) { return changed().hasOnly(keys); }
+
+    // ---------- usuários ----------
+    match /users/{userId} {
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+
+      // Adotante nasce 'user'; ONG nasce 'ong' junto com a sua ONG pendente (mesmo batch).
+      allow create: if signedIn() && request.auth.uid == userId
+        && request.resource.data.active == true
+        && (
+          (request.resource.data.role == 'user' && !('ongId' in request.resource.data))
+          || (request.resource.data.role == 'ong'
+              && getAfter(/databases/$(database)/documents/ongs/$(request.resource.data.ongId)).data.ownerUid == userId
+              && getAfter(/databases/$(database)/documents/ongs/$(request.resource.data.ongId)).data.status == 'pendente')
+        );
+
+      // Ninguém muda o próprio papel, ativação ou ONG; o admin pode.
+      allow update: if isAdmin()
+        || (signedIn() && request.auth.uid == userId && !changed().hasAny(['role', 'active', 'ongId']));
+
+      match /favorites/{petId} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    // ---------- ONGs ----------
+    match /ongs/{ongId} {
+      allow read: if resource.data.status == 'aprovada'
+        || (signedIn() && resource.data.ownerUid == request.auth.uid)
+        || isAdmin();
+      allow create: if signedIn()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.status == 'pendente'
+        && request.resource.data.featured == false;
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.ownerUid == request.auth.uid
+            && !changed().hasAny(['status', 'ownerUid', 'featured', 'cnpj']));
+      allow delete: if isAdmin();
+    }
+
+    // ---------- pets ----------
+    function validPet(d) {
+      return d.keys().hasAll(['name', 'species', 'size', 'gender', 'ongId', 'status', 'statusPublicacao', 'mainImage'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 60
+        && d.status in ['Disponível', 'Em Processo', 'Adotado']
+        && d.statusPublicacao in ['em_analise', 'publicado', 'recusado'];
+    }
+
+    match /pets/{petId} {
+      allow read: if resource.data.statusPublicacao == 'publicado'
+        || ownsOng(resource.data.ongId)
+        || isAdmin();
+
+      // Pet novo da ONG sempre entra "em análise".
+      allow create: if (isAdmin() && validPet(request.resource.data))
+        || (ownsOng(request.resource.data.ongId)
+            && request.resource.data.statusPublicacao == 'em_analise'
+            && validPet(request.resource.data));
+
+      // Edição da ONG volta para "em análise"; troca só de status de adoção não volta.
+      allow update: if (isAdmin() && validPet(request.resource.data))
+        || (ownsOng(resource.data.ongId)
+            && request.resource.data.ongId == resource.data.ongId
+            && validPet(request.resource.data)
+            && (
+              request.resource.data.statusPublicacao == 'em_analise'
+              || onlyChanged(['status', 'updatedAt'])
+            ));
+
+      allow delete: if isAdmin() || ownsOng(resource.data.ongId);
+
+      match /history/{entryId} {
+        allow read: if petReadable(petId);
+        // getAfter: permite criar a entrada no mesmo batch em que o pet é cadastrado.
+        allow create: if isAdmin()
+          || ownsOng(getAfter(/databases/$(database)/documents/pets/$(petId)).data.ongId)
+          || (signedIn()
+              && request.resource.data.type == 'solicitacao_adocao'
+              && request.resource.data.actorUid == request.auth.uid
+              && petDoc(petId).statusPublicacao == 'publicado');
+      }
+    }
+
+    // ---------- solicitações de adoção ----------
+    match /solicitations/{solId} {
+      allow read: if signedIn() && (
+        resource.data.adopterUid == request.auth.uid
+        || ownsOng(resource.data.ongId)
+        || isAdmin());
+
+      allow create: if hasProfile() && me().role == 'user' && me().active == true
+        && request.resource.data.adopterUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && petDoc(request.resource.data.petId).statusPublicacao == 'publicado'
+        && petDoc(request.resource.data.petId).ongId == request.resource.data.ongId
+        && request.resource.data.lgpdConsent == true;
+
+      allow update: if isAdmin()
+        || (ownsOng(resource.data.ongId)
+            && request.resource.data.ongId == resource.data.ongId
+            && request.resource.data.adopterUid == resource.data.adopterUid
+            && request.resource.data.status in ['pending', 'in_review', 'approved', 'rejected', 'completed', 'canceled']
+            && (request.resource.data.status != 'rejected' || request.resource.data.rejectionReason is string))
+        || (signedIn() && resource.data.adopterUid == request.auth.uid
+            && resource.data.status in ['pending', 'in_review', 'approved']
+            && request.resource.data.status == 'canceled'
+            && onlyChanged(['status', 'updatedAt']));
+    }
+
+    // ---------- lar temporário / resgate ----------
+    match /fosterRequests/{reqId} {
+      allow read: if signedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || isAdmin()
+        || (myOngApproved() && (resource.data.status == 'pending' || resource.data.handledByOngId == myOngId())));
+
+      allow create: if signedIn()
+        && request.resource.data.requesterUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && !('handledByOngId' in request.resource.data);
+
+      allow update: if isAdmin()
+        || (myOngApproved() && resource.data.status == 'pending'
+            && request.resource.data.status in ['accepted', 'declined']
+            && request.resource.data.handledByOngId == myOngId())
+        || (myOngApproved() && resource.data.handledByOngId == myOngId()
+            && request.resource.data.handledByOngId == myOngId()
+            && onlyChanged(['promotedToPetId', 'updatedAt']));
+    }
+
+    // ---------- notificações ----------
+    match /notifications/{notifId} {
+      allow read: if signedIn() && (resource.data.recipientUid == request.auth.uid || isAdmin());
+      allow create: if isOng() || isAdmin();
+      allow update: if signedIn() && resource.data.recipientUid == request.auth.uid && onlyChanged(['read']);
+    }
+
+    // ---------- conteúdo institucional ----------
+    match /partners/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /news/{id}     { allow read: if true; allow write: if isAdmin(); }
+    match /stories/{id}  { allow read: if true; allow write: if isAdmin(); }
+
+    // ---------- formulários públicos (só o admin lê) ----------
+    match /donations/{id} {
+      allow create: if request.resource.data.amount is number && request.resource.data.amount >= 1
+        && request.resource.data.amount <= 100000 && request.resource.data.status == 'simulado';
+      allow read: if isAdmin();
+    }
+    match /sponsorLeads/{id} {
+      allow create: if request.resource.data.email is string && request.resource.data.name is string;
+      allow read: if isAdmin();
+    }
+    match /contactMessages/{id} {
+      allow create: if request.resource.data.email is string && request.resource.data.message is string
+        && request.resource.data.message.size() <= 3000;
+      allow read: if isAdmin();
+    }
+  }
+}

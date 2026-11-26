@@ -1,0 +1,52 @@
+{
+  "name": "petlink",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=5173 --host=0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port=4173",
+    "typecheck": "tsc --noEmit",
+    "emulators": "firebase emulators:start --project demo-petlink",
+    "seed": "tsx scripts/seed.ts",
+    "test": "vitest run tests/vaccineStatus.test.ts",
+    "test:rules": "vitest run tests/rules.test.ts",
+    "e2e": "playwright test --trace off",
+    "check:size": "node scripts/check-size.mjs",
+    "check:graph": "madge --circular --extensions ts,tsx src && knip"
+  },
+  "dependencies": {
+    "@fontsource/anton": "^5.3.0",
+    "@fontsource/dancing-script": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@hookform/resolvers": "^7.0.9",
+    "@tanstack/react-query": "^5.108.4",
+    "firebase": "^12.19.0",
+    "lucide-react": "^1.81.0",
+    "motion": "^14.14.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.92.0",
+    "react-router": "^7.18.7",
+    "sonner": "^2.0.8",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^22.20.7",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "firebase-admin": "^14.5.1",
+    "firebase-tools": "^15.37.0",
+    "knip": "^6.48.0",
+    "madge": "^8.0.0",
+    "tailwindcss": "^4.3.5",
+    "tsx": "^4.23.15",
+    "typescript": "~5.8",
+    "vite": "^6.4.6",
+    "vitest": "^3.2.7"
+  }
+}

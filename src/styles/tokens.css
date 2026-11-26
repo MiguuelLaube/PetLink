@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+/* Tokens do PetLink — única fonte de cor/tipo/forma. Ver DESIGN.md. */
+@theme {
+  --color-bg: #fff6e9;
+  --color-peach: #f9d9c9;
+  --color-peach-soft: #fce8dd;
+  --color-yellow: #f6b73c;
+  --color-yellow-soft: #fbe3b3;
+  --color-orange: #f08a24;
+  --color-blue: #bfe3e6;
+  --color-blue-soft: #e1f2f3;
+  --color-primary: #5a0f12;
+  --color-primary-hover: #741a1e;
+  --color-text: #3b2a26;
+  --color-text-muted: #7a5e55;
+  --color-cream: #fff6e9;
+  --color-line: #ebd6c8;
+  --color-white: #ffffff;
+  --color-success: #2f7a4b;
+  --color-success-soft: #e3f2e8;
+  --color-warning: #b4570a;
+  --color-warning-soft: #fdebd6;
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbe4e2;
+  --color-info: #1f5f66;
+  --color-info-soft: #e1f2f3;
+
+  --font-display: 'Anton', 'Impact', sans-serif;
+  --font-sans: 'Poppins', system-ui, sans-serif;
+  --font-script: 'Dancing Script', cursive;
+
+  --radius-block: 32px;
+  --radius-card: 16px;
+  --radius-field: 12px;
+
+  --shadow-warm: 0 10px 30px -12px rgb(90 15 18 / 0.25);
+  --shadow-soft: 0 4px 14px -6px rgb(90 15 18 / 0.18);
+  --shadow-lift: 0 18px 40px -14px rgb(90 15 18 / 0.32);
+
+  --text-display: clamp(3.5rem, 11vw, 9rem);
+  --text-display--line-height: 0.88;
+  --text-h1: clamp(2.5rem, 6vw, 4.5rem);
+  --text-h1--line-height: 0.92;
+  --text-h2: clamp(1.75rem, 3.5vw, 2.5rem);
+  --text-h2--line-height: 0.98;
+
+  --animate-pulse-soft: pulse-soft 1.6s ease-in-out infinite;
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+}

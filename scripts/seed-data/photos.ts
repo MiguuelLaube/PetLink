@@ -1,0 +1,35 @@
+/** Fotos do Unsplash (licença livre) em WebP. */
+export const img = (id: string, w = 800, h = 800) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=75&fm=webp`;
+
+export const PHOTOS = {
+  beagleSorrindo: '1543466835-00a7907e9de1',
+  collieNaPraia: '1587300003388-59208cc962cb',
+  jackRussell: '1561037404-61cd46aa615b',
+  corgiFilhote: '1537151608828-ea2b11777ee8',
+  pugPreto: '1517849845537-4d257902454a',
+  corgiEYorkie: '1548199973-03cce0bbc87b',
+  golden: '1558788353-f76d92427f16',
+  malhado: '1477884213360-7e9d7dcc1e48',
+  goldenFilhote: '1552053831-71594a27632d',
+  gatoPretoBranco: '1514888286974-6c03e2ca1dba',
+  gatoRajadoAzul: '1574158622682-e40e69881006',
+  gatoEscada: '1495360010541-f48722b34f7d',
+  gatinhoPata: '1592194996308-7b43878e84a6',
+  gatoLaranjaAmarelo: '1596854407944-bf87f6fdd49e',
+  gatoRajadoDeitado: '1518791841217-8f162f1e1131',
+  gatoRajadoEscuro: '1478098711619-5ab0b478d6e6',
+  gataTricolor: '1526336024174-e58f5cdd8e13',
+  gatoECaoAbracados: '1450778869180-41d0601e046e',
+  samoieda: '1596492784531-6e6eb5ea9993',
+  clinicaVet: '1629909613654-28e377c37b09',
+  banhoGolden: '1516734212186-a967f81ad0d7',
+  casalComCao: '1601758124510-52d02ddb7cbd',
+  gatoCobertor: '1494256997604-768d1f608cac',
+  gatoLaranjaDeitado: '1519052537078-e6302a4968d4',
+  gataPersa: '1513245543132-31f507417b26',
+  tresGatinhos: '1570018144715-43110363d70a',
+  cavalierFilhote: '1560807707-8cc77767d783',
+  caoNaGrama: '1588943211346-0908a1fb0b01',
+  caoCorrendoPraia: '1530281700549-e82e7bf110d6',
+} as const;
