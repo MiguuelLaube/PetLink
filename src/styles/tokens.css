@@ -38,7 +38,7 @@
   --shadow-soft: 0 4px 14px -6px rgb(90 15 18 / 0.18);
   --shadow-lift: 0 18px 40px -14px rgb(90 15 18 / 0.32);
 
-  --text-display: clamp(3.5rem, 11vw, 9rem);
+  --text-display: clamp(5rem, 13vw, 9rem);
   --text-display--line-height: 0.88;
   --text-h1: clamp(2.5rem, 6vw, 4.5rem);
   --text-h1--line-height: 0.92;

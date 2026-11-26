@@ -50,7 +50,7 @@ async function main() {
     });
   }
 
-  const ongById = new Map(ONGS.map((o) => [o.id, o]));
+  const ongById = new Map<string, (typeof ONGS)[number]>(ONGS.map((o) => [o.id, o]));
   for (const { owner, id, ...ong } of ONGS) {
     await db.doc(`ongs/${id}`).set({ ...ong, ownerUid: uids[owner], createdAt: iso(-365) });
   }
