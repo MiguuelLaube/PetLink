@@ -29,6 +29,6 @@
 @layer components {
   .container-page { width: 100%; max-width: 72rem; margin-inline: auto; padding-inline: 1rem; }
   .house-clip { clip-path: polygon(50% 0, 100% 26%, 100% 100%, 0 100%, 0 26%); }
-  .script-note { font-family: var(--font-script); color: var(--color-primary); opacity: 0.45; }
+  .script-note { font-family: var(--font-script); color: var(--color-primary); opacity: 0.72; } /* 0.72 mantém >= 4.5:1 sobre creme e pêssego */
   .sr-only-focusable:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }

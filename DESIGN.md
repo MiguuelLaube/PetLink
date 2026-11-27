@@ -39,7 +39,7 @@ Não há modo escuro: a marca é creme. O `color-scheme` fica `light`.
 |---|---|---|
 | **Anton** | títulos de seção, hero, valores R$ | 400 (já é bold) |
 | **Poppins** | texto, botões, formulários | 400 / 500 / 600 |
-| **Dancing Script** | frases decorativas ao lado dos títulos, `opacity: .45`, `aria-hidden` | 500 |
+| **Dancing Script** | frases decorativas ao lado dos títulos, `opacity: .72` (mínimo para 4,5:1 sobre creme e pêssego), `aria-hidden` | 500 |
 
 | Escala | Tamanho | Entrelinha | Uso |
 |---|---|---|---|
@@ -73,7 +73,7 @@ Os títulos em Anton ficam em maiúsculas/minúsculas como na referência ("Seus
 - **Selo (`Stamp`):** pílula laranja com texto vinho em `xs`, `rotate(-6deg)`, posicionada sobre o canto do título. Textos: "SALVE UMA VIDA", "AJUDE-OS", "SEU NOVO AMIGO".
 - **Moldura de casinha (`HouseFrame`):** a foto recebe `clip-path: polygon(50% 0, 100% 28%, 100% 100%, 0 100%, 0 28%)` sobre um fundo de cor (amarelo, pêssego ou azul).
 - **Fundo (`PawBackground`):** pegadas e nuvens em SVG inline, com `opacity` entre .06 e .12, `aria-hidden` e `pointer-events: none`.
-- **Frase cursiva:** uma frase curta em Dancing Script ao lado do título, decorativa.
+- **Frase cursiva:** uma frase curta em Dancing Script ao lado do título, decorativa (opacidade .72 por contraste).
 
 ## 6. Componentes
 **Botões** (pílula, Poppins 600, `min-height: 44px`):

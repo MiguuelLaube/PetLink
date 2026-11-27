@@ -101,6 +101,7 @@ export function CatalogPage() {
             </div>
           </div>
 
+          <h2 className="sr-only">Resultados</h2>
           <p aria-live="polite" className="mt-4 text-sm text-text-muted">
             {pets.isLoading ? 'Carregando animais…' : `${result.length} ${result.length === 1 ? 'animal encontrado' : 'animais encontrados'}`}
           </p>

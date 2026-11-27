@@ -69,7 +69,9 @@ Regras:
 | `fosterRequests/{id}` | quem relatou, as ONGs (pendentes ou aceitas por ela) e o admin | o usuário cria; a ONG aceita, recusa ou promove |
 | `notifications/{id}` | o destinatário | a ONG e o admin criam; o destinatário marca como lida |
 | `partners`, `news`, `stories` | todos | o admin |
-| `donations`, `sponsorLeads` | o admin | qualquer pessoa cria |
+| `donations`, `sponsorLeads`, `contactMessages` | o admin | qualquer pessoa cria |
+
+**Storage:** cada pessoa só grava na própria pasta (`pets/{uid}/…`, `ongs/{uid}/…`, `foster/{uid}/…`), só imagens de até 5 MB. As fotos de pets e os logos têm leitura pública; as fotos de resgate só podem ser lidas por quem está logado. Quem pode **usar** a foto numa ficha é decidido pelas regras do Firestore. Não usamos `firestore.get()` nas regras do Storage porque o emulador não resolve essa consulta entre serviços. O SDK do Storage só é carregado quando alguém envia uma foto.
 
 **Mudanças de status de um pet** (`status`): `Disponível → Em Processo` (pedido aprovado) `→ Adotado` (adoção concluída). Se o pedido for cancelado ou recusado depois da aprovação, o pet volta a `Disponível`.
 
@@ -87,3 +89,4 @@ Regras:
 - `.env` com `VITE_FIREBASE_*` (veja `.env.example`). Com `VITE_USE_EMULATORS=true`, o app conecta nos emulators locais.
 - `firebase.json` define as portas dos emulators: Auth 9099, Firestore 8080, Storage 9199 e UI 4000.
 - `scripts/seed.ts` usa o `firebase-admin` apontado para os emulators.
+- Não há índices compostos: todas as consultas usam igualdades simples ou ordenam por um único campo.

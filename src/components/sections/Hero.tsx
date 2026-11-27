@@ -20,7 +20,7 @@ export function Hero({ featured, stories = [], availableCount }: Props) {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden pb-10 pt-6 md:pt-10">
       <PawBackground />
-      <div className="container-page relative grid items-end gap-6 lg:grid-cols-[0.8fr_1.1fr_1.3fr]">
+      <div className="container-page relative grid items-end gap-6 md:grid-cols-2 lg:grid-cols-[0.8fr_1.1fr_1.3fr]">
         {/* Card flutuante do pet em destaque */}
         <div className="order-2 flex items-end gap-4 lg:order-1 lg:flex-col lg:items-start">
           {featured ? (
@@ -52,12 +52,13 @@ export function Hero({ featured, stories = [], availableCount }: Props) {
         </div>
 
         {/* Gato saindo da moldura */}
-        <div className="relative order-1 mx-auto w-full max-w-sm lg:order-2 lg:-mb-16 lg:max-w-none">
+        <div className="relative order-1 mx-auto w-full max-w-[18rem] md:max-w-sm lg:order-2 lg:-mb-16 lg:max-w-none">
           <HouseFrame src={IMAGES.heroCat.src} alt={IMAGES.heroCat.alt} tone="peach" className="aspect-[9/10] w-full" eager />
         </div>
 
         {/* Título gigante */}
         <div className="order-0 lg:order-3 lg:pb-16">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">Adoção responsável de cães e gatos</p>
           <h1 id="hero-title" className="text-display">
             Pet
             <br />
@@ -67,6 +68,11 @@ export function Hero({ featured, stories = [], availableCount }: Props) {
             Cada cão e gato aqui tem uma história e espera uma segunda chance. Conectamos você a ONGs verificadas para uma adoção
             responsável, do primeiro clique ao acompanhamento.
           </p>
+          <div className="mt-6 lg:hidden">
+            <ButtonLink to="/adocao" arrow>
+              Encontrar meu pet
+            </ButtonLink>
+          </div>
         </div>
       </div>
 
@@ -95,9 +101,16 @@ export function Hero({ featured, stories = [], availableCount }: Props) {
               <br />
               match perfeito
             </p>
-            <ButtonLink to="/adocao" arrow>
-              Encontrar meu pet
-            </ButtonLink>
+            <div className="hidden lg:block">
+              <ButtonLink to="/adocao" arrow>
+                Encontrar meu pet
+              </ButtonLink>
+            </div>
+            <div className="lg:hidden">
+              <ButtonLink to="/adocao" variant="secondary" arrow>
+                Ver todos os animais
+              </ButtonLink>
+            </div>
           </div>
         </div>
       </div>

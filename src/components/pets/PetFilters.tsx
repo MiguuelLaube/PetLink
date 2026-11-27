@@ -16,7 +16,7 @@ export function PetFilters({ value, onChange }: Props) {
       <ChipGroup legend="Porte" options={SIZES} value={value.porte} onChange={(v) => set('porte', v)} />
       <ChipGroup legend="Idade" options={AGE_GROUPS} value={value.idade} onChange={(v) => set('idade', v)} />
       <ChipGroup legend="Sexo" options={GENDERS} value={value.sexo} onChange={(v) => set('sexo', v)} />
-      <div className="grid grid-cols-[6rem_1fr] gap-3">
+      <div className="grid grid-cols-[minmax(6.5rem,0.8fr)_1fr] gap-3 lg:grid-cols-1">
         <Select label="UF" value={value.uf} onChange={(e) => set('uf', e.target.value)} options={UF} placeholder="Todas" />
         <Input label="Cidade" value={value.cidade} onChange={(e) => set('cidade', e.target.value)} placeholder="Ex.: Campinas" />
       </div>

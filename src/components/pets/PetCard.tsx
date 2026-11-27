@@ -25,7 +25,7 @@ export function PetCard({ pet, index = 0, favorite, onToggleFavorite, layout = '
   return (
     <article
       className={cn(
-        'group relative flex rounded-card p-4 shadow-warm transition duration-300 hover:-translate-y-1 hover:shadow-lift',
+        'group relative flex rounded-card p-4 shadow-warm transition duration-300 hover:-translate-y-1 hover:shadow-lift has-[a:focus-visible]:ring-4 has-[a:focus-visible]:ring-orange',
         tone.card,
         layout === 'grid' ? 'flex-col' : 'flex-row items-center gap-4',
       )}
@@ -39,7 +39,7 @@ export function PetCard({ pet, index = 0, favorite, onToggleFavorite, layout = '
       <div className={cn('flex flex-1 flex-col', layout === 'grid' && 'mt-4')}>
         <div className="flex items-baseline justify-between gap-2">
           <h3 className="text-lg font-semibold text-primary">
-            <Link to={`/adocao/${pet.id}`} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
+            <Link to={`/adocao/${pet.id}`} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:underline">
               {pet.name}
             </Link>
           </h3>
