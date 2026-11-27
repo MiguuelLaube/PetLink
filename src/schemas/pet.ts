@@ -10,25 +10,25 @@ export const PUBLICATION_STATUS = ['em_analise', 'publicado', 'recusado'] as con
 export const YES_NO_UNKNOWN = ['Sim', 'Não', 'Não testado'] as const;
 export const ENERGY = ['Baixa', 'Média', 'Alta'] as const;
 
-export const vaccineSchema = z.object({
+const vaccineSchema = z.object({
   nome: z.string().trim().min(2, 'Nome da vacina'),
   dataAplicada: isoDate,
   proximoReforco: optionalIsoDate,
 });
 
-export const dewormingSchema = z.object({
+const dewormingSchema = z.object({
   produto: z.string().trim().min(2, 'Produto'),
   data: isoDate,
   proximo: optionalIsoDate,
 });
 
-export const examSchema = z.object({
+const examSchema = z.object({
   nome: z.string().trim().min(2, 'Nome do exame'),
   data: isoDate,
   resultado: z.string().trim().min(1, 'Resultado'),
 });
 
-export const behaviorSchema = z.object({
+const behaviorSchema = z.object({
   criancas: z.enum(YES_NO_UNKNOWN),
   outrosAnimais: z.enum(YES_NO_UNKNOWN),
   energia: z.enum(ENERGY),
@@ -61,9 +61,6 @@ export const petInputSchema = z.object({
 });
 
 export type PetInput = z.infer<typeof petInputSchema>;
-export type Vaccine = z.infer<typeof vaccineSchema>;
-export type Deworming = z.infer<typeof dewormingSchema>;
-export type Exam = z.infer<typeof examSchema>;
 export type PetStatus = (typeof PET_STATUS)[number];
 export type PublicationStatus = (typeof PUBLICATION_STATUS)[number];
 

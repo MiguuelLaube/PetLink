@@ -16,8 +16,13 @@ export async function listAllOngs(): Promise<Ong[]> {
 }
 
 export async function getOng(id: string): Promise<Ong | null> {
-  const snap = await getDoc(doc(db, 'ongs', id));
-  return snap.exists() ? withId<Ong>(snap) : null;
+  try {
+    const snap = await getDoc(doc(db, 'ongs', id));
+    return snap.exists() ? withId<Ong>(snap) : null;
+  } catch (err) {
+    if ((err as { code?: string }).code === 'permission-denied') return null;
+    throw err;
+  }
 }
 
 /** A ONG edita o próprio perfil (CNPJ e status não mudam por aqui). */

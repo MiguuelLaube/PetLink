@@ -5,13 +5,6 @@ export function withId<T>(snap: QueryDocumentSnapshot<DocumentData> | DocumentSn
   return { id: snap.id, ...(snap.data() as object) } as T;
 }
 
-/** Remove o id antes de gravar (o id é o nome do documento). */
-export function stripId<T extends { id?: string }>(obj: T): Omit<T, 'id'> {
-  const { id: _omit, ...rest } = obj;
-  void _omit;
-  return rest;
-}
-
 /** Traduz erros do Firebase para mensagens em pt-BR. */
 export function friendlyError(err: unknown): string {
   const code = (err as { code?: string })?.code ?? '';

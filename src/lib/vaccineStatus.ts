@@ -2,7 +2,7 @@ import { daysBetween, todayIso } from './dates';
 
 export type DoseStatus = 'em_dia' | 'vence_em_breve' | 'atrasada' | 'sem_reforco';
 
-export const DUE_SOON_DAYS = 30;
+const DUE_SOON_DAYS = 30;
 
 /**
  * Calcula o status de uma vacina ou vermifugação a partir do próximo reforço.

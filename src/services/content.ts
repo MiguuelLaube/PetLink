@@ -42,3 +42,19 @@ export async function sendSponsorLead(data: { name: string; email: string; messa
 export async function sendContactMessage(data: { name: string; email: string; message: string }) {
   await addDoc(collection(db, 'contactMessages'), { ...data, createdAt: new Date().toISOString() });
 }
+
+export interface InboxItem {
+  id: string;
+  name?: string;
+  email?: string;
+  message?: string;
+  amount?: number;
+  frequency?: 'unica' | 'mensal';
+  createdAt: string;
+}
+
+/** Caixa de entrada do admin: doações simuladas, patrocinadores e mensagens de contato. */
+export async function listInbox(kind: 'donations' | 'sponsorLeads' | 'contactMessages'): Promise<InboxItem[]> {
+  const snap = await getDocs(collection(db, kind));
+  return snap.docs.map((d) => withId<InboxItem>(d)).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}

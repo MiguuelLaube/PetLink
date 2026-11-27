@@ -25,6 +25,8 @@
   --color-danger-soft: #fbe4e2;
   --color-info: #1f5f66;
   --color-info-soft: #e1f2f3;
+  --color-chart: #9c3b2e; /* série única de gráficos: validada (faixa L, croma, contraste vs branco) */
+  --color-grid: #efe4dc;
 
   --font-display: 'Anton', 'Impact', sans-serif;
   --font-sans: 'Poppins', system-ui, sans-serif;

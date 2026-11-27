@@ -2,8 +2,7 @@ import { z } from 'zod';
 import { emailSchema, phoneSchema, UF } from './common';
 import { isValidCnpj } from '@/lib/cnpj';
 
-export const ONG_STATUS = ['pendente', 'aprovada', 'recusada'] as const;
-export type OngStatus = (typeof ONG_STATUS)[number];
+export type OngStatus = 'pendente' | 'aprovada' | 'recusada';
 
 export const ongProfileSchema = z.object({
   name: z.string().trim().min(3, 'Nome da ONG'),

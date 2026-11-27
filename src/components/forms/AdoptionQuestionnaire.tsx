@@ -69,11 +69,11 @@ export function AdoptionQuestionnaire({ open, onClose, pet, profile, onSubmit }:
             {step ? 'Voltar' : 'Cancelar'}
           </Button>
           {last ? (
-            <Button type="submit" form="form-adocao" loading={isSubmitting} arrow>
+            <Button key="enviar" type="submit" form="form-adocao" loading={isSubmitting} arrow>
               Enviar pedido
             </Button>
           ) : (
-            <Button onClick={next} arrow>
+            <Button key="continuar" onClick={next} arrow>
               Continuar
             </Button>
           )}

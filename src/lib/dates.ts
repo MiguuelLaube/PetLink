@@ -9,7 +9,7 @@ export function todayIso(now: Date = new Date()): string {
 }
 
 /** Converte AAAA-MM-DD para Date ao meio-dia local (evita erro de fuso). */
-export function parseIso(iso: string): Date {
+function parseIso(iso: string): Date {
   const [y, m, d] = iso.slice(0, 10).split('-').map(Number);
   return new Date(y, m - 1, d, 12);
 }
@@ -26,8 +26,4 @@ export function formatDate(iso?: string | null): string {
 export function formatDateTime(iso?: string | null): string {
   if (!iso) return '—';
   return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
-export function nowIso(): string {
-  return new Date().toISOString();
 }

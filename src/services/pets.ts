@@ -49,8 +49,14 @@ export async function listAllPets(): Promise<Pet[]> {
 }
 
 export async function getPet(id: string): Promise<Pet | null> {
-  const snap = await getDoc(petRef(id));
-  return snap.exists() ? withId<Pet>(snap) : null;
+  try {
+    const snap = await getDoc(petRef(id));
+    return snap.exists() ? withId<Pet>(snap) : null;
+  } catch (err) {
+    // Pet em análise/recusado é invisível para quem não é dono: tratamos como "não encontrado".
+    if ((err as { code?: string }).code === 'permission-denied') return null;
+    throw err;
+  }
 }
 
 export async function listHistory(petId: string): Promise<HistoryEntry[]> {

@@ -1,5 +1,4 @@
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { storage } from './firebase';
+import { getAppStorage } from './firebase';
 
 const MAX = 5 * 1024 * 1024;
 
@@ -9,6 +8,7 @@ export async function uploadImage(folder: string, file: File): Promise<string> {
   if (file.size > MAX) throw new Error('Cada foto pode ter no máximo 5 MB.');
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
   const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
+  const [storage, { getDownloadURL, ref, uploadBytes }] = await Promise.all([getAppStorage(), import('firebase/storage')]);
   const snap = await uploadBytes(ref(storage, path), file, { contentType: file.type });
   return getDownloadURL(snap.ref);
 }

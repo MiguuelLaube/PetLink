@@ -2,8 +2,7 @@ import { z } from 'zod';
 import { phoneSchema, UF } from './common';
 import type { OngContact } from './solicitation';
 
-export const FOSTER_STATUS = ['pending', 'accepted', 'declined'] as const;
-export type FosterStatus = (typeof FOSTER_STATUS)[number];
+export type FosterStatus = 'pending' | 'accepted' | 'declined';
 
 export const fosterInputSchema = z.object({
   petName: z.string().trim().min(2, 'Dê um nome provisório'),

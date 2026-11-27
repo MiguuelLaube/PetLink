@@ -1,34 +1,29 @@
 rules_version = '2';
 
+// Cada pessoa só grava na própria pasta: {tipo}/{uid}/arquivo.
+// Quem pode CRIAR/EDITAR um pet (e apontar para a foto) é decidido pelas regras do Firestore.
 service firebase.storage {
   match /b/{bucket}/o {
-    function signedIn() { return request.auth != null; }
-    function me() { return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data; }
     function isImage() {
       return request.resource.contentType.matches('image/.*') && request.resource.size < 5 * 1024 * 1024;
     }
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
 
-    // Fotos de pets e logo da ONG: só a ONG dona escreve.
-    match /pets/{ongId}/{allPaths=**} {
+    // Fotos de pets e logos de ONG: leitura pública.
+    match /pets/{uid}/{file} {
       allow read: if true;
-      allow create, update: if signedIn() && me().role == 'ong' && me().ongId == ongId && isImage();
-      allow delete: if signedIn() && me().role == 'ong' && me().ongId == ongId;
+      allow create: if owner(uid) && isImage();
+      allow delete: if owner(uid);
     }
-    match /ongs/{ongId}/{allPaths=**} {
+    match /ongs/{uid}/{file} {
       allow read: if true;
-      allow create, update: if signedIn() && me().role == 'ong' && me().ongId == ongId && isImage();
-    }
-
-    // Fotos de resgate enviadas pelo usuário.
-    match /foster/{uid}/{allPaths=**} {
-      allow read: if signedIn();
-      allow create: if signedIn() && request.auth.uid == uid && isImage();
+      allow create: if owner(uid) && isImage();
     }
 
-    // Conteúdo do admin (notícias, parceiros, histórias).
-    match /content/{allPaths=**} {
-      allow read: if true;
-      allow write: if signedIn() && me().role == 'admin' && isImage();
+    // Fotos de resgate: visíveis para quem está logado (as ONGs).
+    match /foster/{uid}/{file} {
+      allow read: if request.auth != null;
+      allow create: if owner(uid) && isImage();
     }
   }
 }

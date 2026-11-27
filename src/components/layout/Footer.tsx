@@ -12,7 +12,7 @@ const SOCIAL = [
   { label: 'Instagram', icon: InstagramIcon, href: 'https://instagram.com' },
   { label: 'Facebook', icon: FacebookIcon, href: 'https://facebook.com' },
   { label: 'YouTube', icon: YoutubeIcon, href: 'https://youtube.com' },
-  { label: 'E-mail', icon: Mail, href: 'mailto:contato@petlink.org' },
+  { label: 'Enviar e-mail para o PetLink', icon: Mail, href: 'mailto:contato@petlink.org' },
 ];
 
 export function Footer() {

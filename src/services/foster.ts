@@ -48,11 +48,6 @@ export async function listFosterForOng(ongId: string): Promise<FosterRequest[]> 
   return [...map.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-export async function listAllFosterRequests(): Promise<FosterRequest[]> {
-  const snap = await getDocs(col);
-  return snap.docs.map((d) => withId<FosterRequest>(d));
-}
-
 export async function acceptFoster(req: FosterRequest, ong: Ong) {
   const batch = writeBatch(db);
   batch.update(fosterRef(req.id), {

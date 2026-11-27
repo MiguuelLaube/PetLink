@@ -2,7 +2,7 @@ import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc } f
 import { db } from './firebase';
 import type { UserProfile } from '@/schemas';
 
-export const userRef = (uid: string) => doc(db, 'users', uid);
+const userRef = (uid: string) => doc(db, 'users', uid);
 
 export async function getProfile(uid: string): Promise<UserProfile | null> {
   const snap = await getDoc(userRef(uid));

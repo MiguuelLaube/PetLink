@@ -17,7 +17,7 @@ function Shell({ id, label, error, hint, required, className, children }: FieldS
     <div className={cn('flex flex-col gap-1.5', className)}>
       <label htmlFor={id} className="text-sm font-medium text-text">
         {label}
-        {required && <span className="text-danger"> *</span>}
+        {required && <span aria-hidden className="text-danger"> *</span>}
       </label>
       {children}
       {hint && !error && (
